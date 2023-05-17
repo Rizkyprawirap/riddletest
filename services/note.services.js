@@ -1,5 +1,4 @@
 const NoteModel = require('../model/note.model');
-const jwt =require('jsonwebtoken');
 
 class NoteService {
 
@@ -16,6 +15,7 @@ class NoteService {
             const createNote = new NoteModel({userId, title, desc}); 
 
             return await createNote.save();
+
         } catch (error) {
             console.log(error);
         }
@@ -23,7 +23,6 @@ class NoteService {
 
     static async getAllNoteByUserId(userId){
         try {
-
             const getAllNoteByUserId = await NoteModel.find({userId});
 
             return getAllNoteByUserId;
@@ -36,7 +35,9 @@ class NoteService {
     static async deleteNoteById(id){
         try {
             const deleteNoteById = await NoteModel.findByIdAndDelete(id);            
+            
             return deleteNoteById;
+
         } catch (error) {
             console.log(error);
         }
@@ -46,13 +47,56 @@ class NoteService {
         try {
 
             const filter = {_id: id};
-            // console.log(filter)
             const update = {$set: {title: title, desc: desc}};
-            // console.log(update)
             const updateNoteTitle = await NoteModel.updateOne(filter, update);            
-            // console.log(updateNoteTitle)
             
             return updateNoteTitle;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    static async sortNoteByNameDesc(){
+        try {
+
+            const sortCriteria = {title: -1};
+
+            const doc = NoteModel.find().sort(sortCriteria);
+
+            return doc;
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    static async sortNoteByNameAsc(){
+        try {
+
+            const sortCriteria = {title: 1};
+
+            const doc = NoteModel.find().sort(sortCriteria);
+
+            return doc;
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    static async sortNoteByLatest(){
+        try {
+
+            const sortCriteria = {createdAt: -1};
+
+            const doc = NoteModel.find().sort(sortCriteria);
+
+            return doc;
+
+
         } catch (error) {
             console.log(error);
         }

@@ -5,6 +5,14 @@ exports.register = async(req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
 
+        if (firstName === "" || lastName === ""){
+            return res.json("insert more!");
+        }
+
+        if (password.length < 6){
+            return res.json("insert more!");
+        }
+
         // Generate a salt
         const saltRounds = 10;
         const salt = bcrypt.genSaltSync(saltRounds);
@@ -19,6 +27,7 @@ exports.register = async(req, res) => {
 
     } catch (error) {
         res.status(500).json({message: "Error while register!"});
+        console.log(error)
     }
 }
 
@@ -29,13 +38,13 @@ exports.login = async(req, res) => {
         const user = await UserService.checkEmail(email);
 
         if (!user) {
-            res.status(500).json({message: "User not exist!"});
+            return res.status(500).json({message: "User not exist!"});
         }
 
         const isMatch = bcrypt.compareSync(password, user.password);
     
         if(!isMatch) {
-            res.status(500).json({message: "Password does not match"});
+            return res.status(500).json({message: "Password does not match"});
         }
 
         var tokenData = {_id: user._id, email: user.email, firstName: user.firstName, lastName: user.lastName};

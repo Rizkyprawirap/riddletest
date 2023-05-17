@@ -21,7 +21,6 @@ exports.getAllNoteByUserId = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({message: "Error while getting note!"});
-        console.log(error)
     };
 };
 
@@ -32,14 +31,13 @@ exports.deleteNoteById = async (req, res) => {
         const isDelete = await NoteService.deleteNoteById(id);
         
         if (isDelete === null) {
-            res.status(404).json({message: "Note not exist!"});
+            return res.status(404).json({message: "Note not exist!"});
         }
         
         res.status(200).json({message: "Note succesfully deleted!"});
         
     } catch (error) {
         res.status(500).json({message: "Error while deleting note!"});
-        console.log(error)
     };
 };
 
@@ -50,15 +48,49 @@ exports.updateNote = async (req, res) => {
         const isUpdate = await NoteService.updateNote(id, title, desc);
 
         if (!isUpdate) {
-            res.status(404).json({message: "Note not exist!"});
+            return res.status(404).json({message: "Note not exist!"});
         }
 
         res.status(200).json({message: "Note succesfully updated!"});
 
     } catch (error) {
         res.status(500).json({message: "Error while updating note!"});
-        console.log(error)
     };
-}
-;
+};
+
+exports.sortNoteByNameDesc = async (req, res) => {
+    try {
+
+        const document = await NoteService.sortNoteByNameDesc()
+
+        res.status(200).json({data: document})
+
+    } catch (error) {
+        res.status(500).json({message: "Error while sorting note!"});
+    };
+};
+
+exports.sortNoteByNameAsc = async (req, res) => {
+    try {
+
+        const document = await NoteService.sortNoteByNameAsc()
+
+        res.status(200).json({data: document})
+
+    } catch (error) {
+        res.status(500).json({message: "Error while sorting note!"});
+    };
+};
+
+exports.sortNoteByLatestTime = async (req, res) => {
+    try {
+
+        const document = await NoteService.sortNoteByLatest()
+
+        res.status(200).json({data: document})
+
+    } catch (error) {
+        res.status(500).json({message: "Error while sorting note!"});
+    };
+};
 
