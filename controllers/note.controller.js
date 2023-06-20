@@ -2,8 +2,9 @@ const NoteService = require('../services/note.services');
 
 exports.createNote = async (req, res) => {
     try {
-        const {userId, title, desc} = req.body;
-        const note = await NoteService.createNote(userId, title, desc);
+        const {userToken, title, desc} = req.body;
+
+        const note = await NoteService.createNote(userToken, title, desc);
         
         res.status(200).json({message: "Note has been created!", note: note});
         
@@ -60,7 +61,6 @@ exports.updateNote = async (req, res) => {
 
 exports.sortNoteByNameDesc = async (req, res) => {
     try {
-
         const document = await NoteService.sortNoteByNameDesc()
 
         res.status(200).json({data: document})

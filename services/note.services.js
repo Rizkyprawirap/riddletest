@@ -1,4 +1,5 @@
 const NoteModel = require('../model/note.model');
+const jwt =require('jsonwebtoken');
 
 class NoteService {
 
@@ -10,8 +11,12 @@ class NoteService {
         }
     }
 
-    static async createNote(userId, title, desc){
+    static async createNote(userToken, title, desc){
         try {
+            const decode = jwt.decode(userToken, { complete: true});
+
+            const userId = decode.payload._id;
+
             const createNote = new NoteModel({userId, title, desc}); 
 
             return await createNote.save();
